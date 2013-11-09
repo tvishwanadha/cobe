@@ -113,11 +113,14 @@ class IrcClientCommand(object):
         subparser.add_argument("-c", "--channel", action="append",
                                required=True, help="IRC channel")
 
+        subparser.add_argument("-b", "--brain",
+                               default="cobe.store", help="brain file")
+
         subparser.set_defaults(run=cls.run)
 
     @staticmethod
     def run(args):
-        brain = cobe.brain.Brain("cobe.store")
+        brain = cobe.brain.Brain(args.brain)
 
         client = IrcClient(brain, args.ignored_nicks, args.only_nicks)
         client.connect(args.server, args.port, args.nick)
