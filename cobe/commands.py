@@ -39,12 +39,12 @@ class DumpCommand(object):
             print token, decode_one(token_id)
 
         print "Normalized tokens:"
-        for key in model._prefix_keys("n"):
+        for key in model.store.prefix_keys("n"):
             print key
 
         print "3-gram counts:"
         get_token = model.tokens.get_token
-        for ngram, count in model._prefix_items("3", strip_prefix=True):
+        for ngram, count in model.store.prefix_items("3", strip_prefix=True):
             # This needs a more efficient way to get the token ids,
             # maybe a simple varint-aware string split.
             grams = [get_token(encode_one(i)) for i in decode(ngram)]
