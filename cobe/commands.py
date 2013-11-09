@@ -22,11 +22,15 @@ class DumpCommand(object):
     @classmethod
     def add_subparser(cls, parser):
         subparser = parser.add_parser("dump")
+
+        subparser.add_argument("-b", "--brain",
+                               default="cobe.store", help="brain file")
+
         subparser.set_defaults(run=cls.run)
 
     @staticmethod
     def run(args):
-        store = park.SQLiteStore("cobe.store")
+        store = park.SQLiteStore(args.brain)
         analyzer = analysis.WhitespaceAnalyzer()
         model = Model(analyzer, store)
 
@@ -51,12 +55,14 @@ class TrainCommand(object):
     @classmethod
     def add_subparser(cls, parser):
         subparser = parser.add_parser("train", help="Train files of text")
+        subparser.add_argument("-b", "--brain",
+                               default="cobe.store", help="brain file")
         subparser.add_argument("file", nargs="+")
         subparser.set_defaults(run=cls.run)
 
     @staticmethod
     def run(args):
-        brain = Brain("cobe.store")
+        brain = Brain(args.brain)
 
         files = fileinput.FileInput(args.file,
                                     openhook=fileinput.hook_compressed)
@@ -91,12 +97,14 @@ class TrainIrcLogCommand:
         subparser.add_argument("-o", "--only-nick", action="append",
                                dest="only_nicks",
                                help="Only train from specified nicks")
+        subparser.add_argument("-b", "--brain",
+                               default="cobe.store", help="brain file")
         subparser.add_argument("file", nargs="+")
         subparser.set_defaults(run=cls.run)
 
     @classmethod
     def run(cls, args):
-        brain = Brain("cobe.store")
+        brain = Brain(args.brain)
 
         files = fileinput.FileInput(args.file,
                                     openhook=fileinput.hook_compressed)
@@ -158,11 +166,13 @@ class ConsoleCommand:
     @classmethod
     def add_subparser(cls, parser):
         subparser = parser.add_parser("console", help="Interactive console")
+        subparser.add_argument("-b", "--brain",
+                               default="cobe.store", help="brain file")
         subparser.set_defaults(run=cls.run)
 
     @staticmethod
     def run(args):
-        brain = Brain("cobe.store")
+        brain = Brain(args.brain)
 
         history = os.path.expanduser("~/.cobe_history")
         try:
