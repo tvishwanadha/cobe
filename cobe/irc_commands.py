@@ -85,8 +85,8 @@ class IrcClient(irc.client.SimpleIRCClient):
         # convert message to unicode
         text = text.decode("utf-8").strip()
 
-        if not self.only_nicks or user in self.only_nicks:
-            self.brain.train(text)
+        #if not self.only_nicks or user in self.only_nicks:
+        #    self.brain.train(text)
 
         if to == conn.nickname:
             reply = self.brain.reply(text)
