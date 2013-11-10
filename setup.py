@@ -34,7 +34,7 @@ setup(
     install_requires=[
         "PyStemmer==1.2.0",
         "argparse==1.2.1",
-        "irc==3.0",
+        "irc==8.5.3",
         "park==1.0"
     ],
 
