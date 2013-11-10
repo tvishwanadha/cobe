@@ -57,17 +57,17 @@ class IrcClient(irc.client.SimpleIRCClient):
         self._check_connection()
 
     def on_pubmsg(self, conn, event):
-        user = irc.client.nm_to_n(event.source())
+        user = irc.client.NickMask(event.source).nick
 
         # ignore specified nicks
         if self.ignored_nicks and user in self.ignored_nicks:
             return
 
         # only respond on channels
-        if not irc.client.is_channel(event.target()):
+        if not irc.client.is_channel(event.target):
             return
 
-        msg = event.arguments()[0]
+        msg = event.arguments[0]
 
         # strip pasted nicks from messages
         msg = re.sub("<\S+>\s+", "", msg)
@@ -90,7 +90,7 @@ class IrcClient(irc.client.SimpleIRCClient):
 
         if to == conn.nickname:
             reply = self.brain.reply(text)
-            conn.privmsg(event.target(), "%s: %s" % (user, reply))
+            conn.privmsg(event.target, "%s: %s" % (user, reply))
 
 
 class IrcClientCommand(object):
